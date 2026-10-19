@@ -103,13 +103,14 @@ export function loadSavedPresets(): PresetItem[] {
  */
 export function savePresetItem(preset: PresetItem): { success: boolean; error?: string } {
   try {
+    const sanitized = sanitizePreset(preset) || preset;
     const current = loadSavedPresets();
-    const existingIndex = current.findIndex((p) => p.id === preset.id);
+    const existingIndex = current.findIndex((p) => p.id === sanitized.id);
 
     if (existingIndex >= 0) {
-      current[existingIndex] = { ...preset, updatedAt: Date.now() };
+      current[existingIndex] = { ...sanitized, updatedAt: Date.now() };
     } else {
-      current.unshift({ ...preset, updatedAt: Date.now() });
+      current.unshift({ ...sanitized, updatedAt: Date.now() });
     }
 
     memoryPresetsCache = current;

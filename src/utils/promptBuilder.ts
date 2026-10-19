@@ -16,7 +16,7 @@ const ATTACH_INSTRUCTION = '[Attach your reference image and your vessel image t
 
 export const FRIED_EGG_PHRASE =
   `EGG PLACEMENT (critical): Place one perfect sunny-side up fried egg directly on top of the mound of steamed rice. The egg must rest on the rice itself, with the rice visibly supporting it and the yolk sitting above the top of the rice mound. Do NOT place the egg in the middle of the plate, do NOT place it between the rice and the main dish or side dishes, and do NOT place it on top of the main dish or its sauce. The rice mound stays distinct and separate from the main dish, and the egg is the topping of the rice only. If the dish contains no steamed rice at all, place the egg on top of the main item instead.
-EGG APPEARANCE: The egg white is fully cooked yet tender, soft and delicate, smooth and opaque with a clean, neat circular edge and no browning or crispy edges. The vibrant golden-yellow, plump, rounded yolk sits centered on the egg with a glossy finish and subtle specular highlights, and looks soft and just-set, never hard or rubbery. The egg is natural in size and proportion to the rice mound and the plate, with exactly one egg.`;
+EGG APPEARANCE (natural, real home-cooked look): The fried egg looks genuinely cooked in a pan, not a perfect studio model. Its shape is organic and slightly irregular, NOT a perfect circle: the edge is gently uneven with soft natural ruffles and small wavy curves. The egg white is tender and soft with a slight natural translucency near the thin outer edges, a few tiny natural bubbles or lacy texture at the rim, and at most a very faint trace of golden color at the edge, never crispy or browned. Because of gravity, the egg white drapes and relaxes over the surface of the rice, following the curves and grains of the rice mound, spreading slightly down the sides and settling softly into the rice rather than standing stiff or flat like a disc. The yolk is plump and glossy but slightly off-center and not a perfect sphere: it has a gentle natural dome that sags a little under its own weight, with a thin delicate membrane, a soft wet sheen, a few subtle natural reflections, and slightly uneven color from deep orange to golden. The egg looks soft, moist and wobbly, as if it would jiggle when touched, never hard, rubbery, plastic, waxy or glossy like a toy. Include subtle natural imperfections such as tiny uneven spots on the white, and natural contact shadows where the egg meets the rice. The egg is natural in size and proportion to the rice mound and the plate, with exactly one egg.`;
 
 /**
  * Builds deterministic Gemini prompt texts
@@ -52,7 +52,7 @@ export function buildGeminiPrompt(state: FormState): {
 
   const cropOptions = isFood ? CROP_DISTANCES_FOOD : CROP_DISTANCES_BEVERAGE;
   const { phrase: cropPhrase, lens: lensPhrase } = getCropLens(cropOptions, state.cropDistance);
-  const backgroundPhrase = getOptionPhrase(BACKGROUND_DETAILS, state.backgroundDetail);
+  const backgroundPhrase = getOptionPhrase(BACKGROUND_DETAILS, state.backgroundDetail, state.subjectType);
 
   const beverageEffectPhrase = !isFood && state.beverageEffect && state.beverageEffect !== 'None'
     ? getOptionPhrase(BEVERAGE_EFFECTS, state.beverageEffect)
@@ -145,7 +145,7 @@ export function buildChatGPTPrompt(state: FormState): {
 
   const cropOptions = isFood ? CROP_DISTANCES_FOOD : CROP_DISTANCES_BEVERAGE;
   const { phrase: cropPhrase, lens: lensPhrase } = getCropLens(cropOptions, state.cropDistance);
-  const backgroundPhrase = getOptionPhrase(BACKGROUND_DETAILS, state.backgroundDetail);
+  const backgroundPhrase = getOptionPhrase(BACKGROUND_DETAILS, state.backgroundDetail, state.subjectType);
 
   const beverageEffectPhrase = !isFood && state.beverageEffect && state.beverageEffect !== 'None'
     ? getOptionPhrase(BEVERAGE_EFFECTS, state.beverageEffect)

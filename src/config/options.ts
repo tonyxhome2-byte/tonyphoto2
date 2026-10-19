@@ -543,7 +543,8 @@ export const BACKGROUND_DETAILS: DropdownOption[] = [
     value: 'Clean seamless studio backdrop',
     labelThai: 'Clean seamless studio backdrop — ฉากสตูดิโอไร้รอยต่อ คลีนสไตล์มินิมอล',
     labelEn: 'Clean seamless studio backdrop',
-    promptPhrase: 'seamless matte studio cyc backdrop creating an ultra-clean distraction-free commercial aesthetic',
+    promptPhrase:
+      "high-quality commercial food product photograph with the food's details preserved exactly as in the reference, placed on a seamless, pure white studio background, isolated with no other objects or surfaces in the scene, with no props, no ingredients and no scattered items around the main plate, lit with soft, even, diffuse lighting that minimizes harsh shadows and keeps the background perfectly clean",
   },
   {
     value: 'Marble surface',
@@ -585,9 +586,17 @@ export const ASPECT_RATIOS: Array<{ value: AspectRatio; labelThai: string; label
   { value: '16:9', labelThai: '16:9', labelEn: '16:9 Banner', desc: 'แนวนอน (Hero Banner / Billboard)' },
 ];
 
-export function getOptionPhrase(options: DropdownOption[], value: string): string {
+export function getOptionPhrase(
+  options: DropdownOption[],
+  value: string,
+  subjectType?: 'food' | 'beverage'
+): string {
   const match = options.find((opt) => opt.value === value);
-  return match ? match.promptPhrase : value;
+  if (!match) return value;
+  if (value === 'Clean seamless studio backdrop' && subjectType === 'beverage') {
+    return "commercial beverage product photograph with the beverage's details preserved exactly as in the reference, placed on a seamless, pure white studio background, isolated with no other objects or surfaces in the scene, with no props, no ingredients and no scattered items around the main glass or can, lit with soft, even, diffuse lighting that minimizes harsh shadows and keeps the background perfectly clean";
+  }
+  return match.promptPhrase;
 }
 
 export function getCropLens(options: DropdownOption[], value: string): { phrase: string; lens: string } {
