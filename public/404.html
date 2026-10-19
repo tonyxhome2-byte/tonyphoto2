@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8">
+    <title>Food &amp; Drink Ad Prompt Studio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d97706' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'/></svg>">
+    <script>
+      // Single Page Application routing for GitHub Pages
+      // Redirects nested path back to the application entry point
+      (function() {
+        var path = window.location.pathname;
+        var segments = path.split('/').filter(Boolean);
+        // If hosted on GitHub Pages subfolder (e.g., username.github.io/repo-name/...)
+        if (window.location.hostname.endsWith('github.io') && segments.length > 0) {
+          window.location.replace('/' + segments[0] + '/');
+        } else {
+          window.location.replace('./');
+        }
+      })();
+    </script>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background-color: #faf8f5;
+        color: #1c1917;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        text-align: center;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+      .card {
+        background: #ffffff;
+        padding: 32px 24px;
+        border-radius: 16px;
+        border: 1px solid #fde68a;
+        box-shadow: 0 4px 20px rgba(217, 119, 6, 0.08);
+        max-width: 420px;
+        width: 100%;
+      }
+      .icon-box {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 16px;
+        border-radius: 12px;
+        background: #fffbeb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      h1 {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 8px;
+        color: #1c1917;
+      }
+      p {
+        color: #78716c;
+        font-size: 13px;
+        line-height: 1.5;
+        margin: 0 0 20px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 24px;
+        background: #d97706;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: background 0.2s ease;
+      }
+      .btn:hover {
+        background: #b45309;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="icon-box">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <h1>กำลังเปลี่ยนเส้นทางกลับสู่หน้าหลัก</h1>
+      <p>ระบบกำลังนำคุณกลับสู่ Food &amp; Drink Ad Prompt Studio</p>
+      <a href="./" class="btn">เข้าสู่หน้าหลักทันที</a>
+    </div>
+  </body>
+</html>
