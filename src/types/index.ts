@@ -19,6 +19,7 @@ export interface FormState {
   aspectRatio: AspectRatio;
   additionalNotes: string;
   outputMode: OutputMode;
+  addFriedEgg?: boolean;
 }
 
 export interface PresetItem {
@@ -41,6 +42,7 @@ export interface PresetItem {
   additionalNotes: string;
   outputMode: OutputMode;
   coverImageDataUrl?: string;
+  addFriedEgg?: boolean;
 }
 
 export interface GeneratedPromptResult {

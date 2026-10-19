@@ -569,6 +569,12 @@ export const BACKGROUND_DETAILS: DropdownOption[] = [
     labelEn: 'Scattered ingredient props',
     promptPhrase: 'meticulously styled scatter of raw pristine hero ingredients, whole spices, and micro herbs subtly framing the main vessel',
   },
+  {
+    value: 'Polished concrete surface',
+    labelThai: 'Polished concrete surface — พื้นปูนเปลือยขัดมันโมเดิร์นลอฟท์ (มินิมอล ร่วมสมัย เท่สะอาดตา)',
+    labelEn: 'Polished concrete surface',
+    promptPhrase: 'sleek polished concrete tabletop with subtle mottled industrial texture, neutral grey mineral tones, and modern minimalist sophistication',
+  },
 ];
 
 export const ASPECT_RATIOS: Array<{ value: AspectRatio; labelThai: string; labelEn: string; desc: string }> = [

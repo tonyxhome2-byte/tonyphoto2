@@ -14,6 +14,10 @@ import {
 
 const ATTACH_INSTRUCTION = '[Attach your reference image and your vessel image to this chat first.]';
 
+export const FRIED_EGG_PHRASE =
+  `EGG PLACEMENT (critical): Place one perfect sunny-side up fried egg directly on top of the mound of steamed rice. The egg must rest on the rice itself, with the rice visibly supporting it and the yolk sitting above the top of the rice mound. Do NOT place the egg in the middle of the plate, do NOT place it between the rice and the main dish or side dishes, and do NOT place it on top of the main dish or its sauce. The rice mound stays distinct and separate from the main dish, and the egg is the topping of the rice only. If the dish contains no steamed rice at all, place the egg on top of the main item instead.
+EGG APPEARANCE: The egg white is fully cooked yet tender, soft and delicate, smooth and opaque with a clean, neat circular edge and no browning or crispy edges. The vibrant golden-yellow, plump, rounded yolk sits centered on the egg with a glossy finish and subtle specular highlights, and looks soft and just-set, never hard or rubbery. The egg is natural in size and proportion to the rice mound and the plate, with exactly one egg.`;
+
 /**
  * Builds deterministic Gemini prompt texts
  */
@@ -96,7 +100,9 @@ export function buildGeminiPrompt(state: FormState): {
     ? 'The beverage must be presented in the exact aluminum soda can shown in the attached vessel image—faithfully replicating its precise aluminum finish, pull-tab detail, printed graphics, colors, and can geometry without alteration (faithfully adopt the artwork from the attached image; do not invent trademark brand logos).'
     : 'The food or drink must be served in the exact vessel shown in the attached vessel image—faithfully replicating its precise material, shape, color, and finish without alteration.';
 
-  const phase2Text = `Create an image: A photorealistic, high-end commercial advertising poster photograph of "${menuName}"${cuisineHintText}. The subject must feature verified, authentic fresh ingredients prepared with Michelin-star precision and appetizing vibrancy. ${vesselRuleText} Frame the shot with a ${cameraAnglePhrase}, captured on a ${lensPhrase}. The scene is illuminated by ${lightingPhrase}, sculpting rich depth, specular highlights, and soft graduated shadows. For composition, place the hero ${vesselWord} in a ${positionPhrase}, framed in a ${cropPhrase}, set against a ${backgroundPhrase}. The overall aesthetic and color harmony must be inspired by the attached reference image and elevated into ${moodPhrase}. Maintain absolute photorealism with ${realismCues}, avoiding any CGI artificiality, plastic sheen, or AI look.${bevText}${notesText} The final result must be an ultra-high-resolution commercial print-grade poster in ${state.aspectRatio} aspect ratio. Avoid: text overlays, logos, typography, watermarks, human hands, people, deformed utensils, duplicate plates, or distorted geometry.`;
+  const eggPhraseText = isFood && state.addFriedEgg ? ` ${FRIED_EGG_PHRASE}` : '';
+
+  const phase2Text = `Create an image: A photorealistic, high-end commercial advertising poster photograph of "${menuName}"${cuisineHintText}. The subject must feature verified, authentic fresh ingredients prepared with Michelin-star precision and appetizing vibrancy.${eggPhraseText} ${vesselRuleText} Frame the shot with a ${cameraAnglePhrase}, captured on a ${lensPhrase}. The scene is illuminated by ${lightingPhrase}, sculpting rich depth, specular highlights, and soft graduated shadows. For composition, place the hero ${vesselWord} in a ${positionPhrase}, framed in a ${cropPhrase}, set against a ${backgroundPhrase}. The overall aesthetic and color harmony must be inspired by the attached reference image and elevated into ${moodPhrase}. Maintain absolute photorealism with ${realismCues}, avoiding any CGI artificiality, plastic sheen, or AI look.${bevText}${notesText} The final result must be an ultra-high-resolution commercial print-grade poster in ${state.aspectRatio} aspect ratio. Avoid: text overlays, logos, typography, watermarks, human hands, people, deformed utensils, duplicate plates, or distorted geometry.`;
 
   // Single message format: Immediate generation with silent pre-check & output rule
   const singleMessage = `${ATTACH_INSTRUCTION}
@@ -192,9 +198,10 @@ Note: Do not invent ingredients that are not authentic to this dish or visible i
 
   const notesLine = state.additionalNotes?.trim() ? `\n• Notes: ${state.additionalNotes.trim()}` : '';
   const bevLine = combinedBevEffect ? `\n• Special Effect: ${combinedBevEffect}` : '';
+  const eggPhraseText = isFood && state.addFriedEgg ? ` ${FRIED_EGG_PHRASE}` : '';
 
   const generationLines = `Create one photorealistic commercial advertising poster photograph of "${menuName}" in aspect ratio ${state.aspectRatio}:
-• Subject: "${menuName}"${cuisineHintText} featuring verified authentic fresh ingredients, exquisite culinary craft, and appetizing textures.
+• Subject: "${menuName}"${cuisineHintText} featuring verified authentic fresh ingredients, exquisite culinary craft, and appetizing textures.${eggPhraseText}
 • Vessel: ${vesselRuleText}
 • Camera: ${cameraAnglePhrase}; captured with a ${lensPhrase}.
 • Lighting: ${lightingPhrase}.

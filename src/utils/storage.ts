@@ -37,6 +37,7 @@ export const DEFAULT_FORM_STATE: FormState = {
   aspectRatio: '4:5',
   additionalNotes: '',
   outputMode: 'one-message',
+  addFriedEgg: false,
 };
 
 /**
@@ -67,6 +68,7 @@ function sanitizePreset(raw: any): PresetItem | null {
     additionalNotes: typeof raw.additionalNotes === 'string' ? raw.additionalNotes : '',
     outputMode: raw.outputMode === 'two-messages' ? 'two-messages' : 'one-message',
     coverImageDataUrl: typeof raw.coverImageDataUrl === 'string' ? raw.coverImageDataUrl : undefined,
+    addFriedEgg: typeof raw.addFriedEgg === 'boolean' ? raw.addFriedEgg : false,
   };
 }
 
