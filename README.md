@@ -1,11 +1,54 @@
-<div align="center">
+# Food & Drink Ad Prompt Studio (สตูดิโอสร้างพรอมต์โฆษณาอาหารและเครื่องดื่ม)
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+เว็บแอปพลิเคชันแบบ **100% Client-Side (Zero-Cost)** สำหรับสร้างข้อความพรอมต์ (Prompt) คุณภาพสูงระดับมืออาชีพเพื่อนำไปวางใน **Gemini** หรือ **ChatGPT** ในการสร้างภาพถ่ายโฆษณาอาหารจัดจาน (Plated Food) และเครื่องดื่ม (Beverage) เกรดเดียวกับแบรนด์ชั้นนำระดับโลก 
 
-  <h1>Built with AI Studio</h2>
+> **สำคัญ:** แอปพลิเคชันนี้ฟรี 100% ไม่ต้องใช้ API Key ใดๆ ทั้งสิ้น ไม่มีการเรียก AI จากระบบภายนอก หรือเสียค่าบริการใดๆ การสร้างภาพจะเกิดขึ้นในบัญชี Gemini หรือ ChatGPT ของตัวผู้ใช้เองโดยตรง
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+---
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## จุดเด่นและแนวคิดการทำงาน (Concept)
 
-</div>
+- **INSPIRE FROM REFERENCE:** พรอมต์จะสั่งให้ AI ในแชทวิเคราะห์ภาพอ้างอิงและภาพภาชนะที่คุณแนบไป เพื่อถอดรหัสโทนสี แสง และอารมณ์ แล้วยกระดับเป็นภาพโฆษณาระดับไฟน์ไดนิ่ง/ซูเปอร์พรีเมียม โดยไม่ลอกเลียนแบบการจัดวางของภาพต้นฉบับตรงๆ
+- **ตรวจวิเคราะห์ความถูกต้องของวัตถุดิบ (Authentic Consistency Check):** พรอมต์จะสั่งให้ AI ค้นหาส่วนผสมหลักที่แท้จริงของเมนูนั้นๆ และตรวจสอบความสอดคล้อง หากภาพอ้างอิงไม่ตรงกับเมนูจริง AI จะยึดวัตถุดิบที่แท้จริงเป็นหลัก
+- **100% Client-Side & Offline:** ทำงานบนเบราว์เซอร์ของผู้ใช้ทั้งหมด ไม่ต้องมี Backend หรือฐานข้อมูล และใช้งานออฟไลน์ได้หลังจากโหลดหน้าเว็บครั้งแรก
+- **Live Menu Name Swap:** เปลี่ยนชื่อเมนูแล้วพรอมต์จะอัปเดตแบบเรียลไทม์ทันทีโดยไม่ต้องตั้งค่าใหม่
+- **ระบบพรีเซ็ต (Presets):** บันทึกการตั้งค่าไว้ในเครื่อง (localStorage) พร้อมฟังก์ชันเพิ่มภาพปกผลลัพธ์ที่คุณสร้างได้เอง
+
+---
+
+## ขั้นตอนการติดตั้งและรันในเครื่อง (Local Run)
+
+### สิ่งที่จำเป็นต้องมี
+- Node.js เวอร์ชัน 18 ขึ้นไป
+- npm
+
+### คำสั่งสำหรับรันโปรเจกต์
+1. ติดตั้ง Dependencies:
+   ```bash
+   npm install
+   ```
+
+2. เริ่มต้นรัน Development Server:
+   ```bash
+   npm run dev
+   ```
+   เปิดเบราว์เซอร์ไปที่ `http://localhost:3000`
+
+3. ทดสอบการ Build สำหรับ Production:
+   ```bash
+   npm run build
+   ```
+
+---
+
+## ขั้นตอนการเผยแพร่ขึ้น GitHub Pages (Publishing Guide)
+
+โปรเจกต์นี้ตั้งค่า GitHub Actions ไว้อย่างสมบูรณ์ในไฟล์ `.github/workflows/deploy.yml` พร้อมใช้งานได้ทันที:
+
+1. Push โค้ดทั้งหมดขึ้นไปยัง GitHub Repository ของคุณ (Branch `main` หรือ `master`)
+2. เข้าไปที่หน้า Repository บน GitHub แล้วคลิกแท็บ **Settings**
+3. ที่เมนูด้านซ้าย เลือก **Pages** (ใต้หมวดหมู่ Code and automation)
+4. ในส่วน **Build and deployment**:
+   - เปลี่ยนช่อง **Source** ให้เป็น **GitHub Actions**
+5. GitHub Actions จะทำการ Build และ Deploy ให้อัตโนมัติในไม่กี่นาที
+6. ลิงก์เว็บไซต์ของคุณจะปรากฏขึ้นพร้อมใช้งานทันที (เช่น `https://<username>.github.io/<repo-name>/`)
