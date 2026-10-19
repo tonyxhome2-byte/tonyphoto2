@@ -62,13 +62,19 @@ export function buildGeminiPrompt(state: FormState): {
 
   const vesselWord = isFood ? 'plate/bowl vessel' : (isCan ? 'aluminum soda can vessel' : 'glass/bottle vessel');
   const itemTypeWord = isFood ? 'plated food dish' : (isCan ? 'canned soda beverage' : 'beverage');
+  const cuisineSilentPart = state.cuisineHint.trim() ? ` (cuisine hint: "${state.cuisineHint.trim()}")` : '';
 
-  // Vessel analysis prompt text
+  // Silent pre-check and output rule instructions for immediate image generation
+  const silentPreCheck = `SILENT PRE-CHECK (do this internally, do NOT write it out): Study the attached reference image and the attached vessel image. Work out the vessel's exact material, shape and color, the reference image's colors, textures, plating style and mood, and the authentic main ingredients and signature look of "${menuName}"${cuisineSilentPart}. If the reference image conflicts with the authentic version of "${menuName}", follow the authentic main ingredients while keeping the reference's mood, colors and style. If the name is ambiguous, choose the most likely interpretation silently. Never invent ingredients that are not part of the real dish or visible in the reference.`;
+
+  const outputRule = `OUTPUT RULE: Respond with the generated image only. Do not write any analysis, explanation, description, caption, introduction, summary, or follow-up question. Do not describe your plan or repeat these instructions. Generate the image immediately.`;
+
+  // Vessel analysis prompt text (for Two-message mode Message 1)
   const vesselAnalysisText = isCan
     ? '(b) Analyze the vessel image in detail: examine the aluminum soda can proportions, brushed metallic texture, top rim and pull-tab details, and the can artwork and graphic color identity (faithfully replicate the graphics and colors from the attached image without inventing real trademark brand logos).'
     : '(b) Analyze the vessel image in detail: its material, shape, color, proportions, and unique craftsmanship.';
 
-  // Phase 1 Analysis paragraph for Gemini
+  // Phase 1 Analysis paragraph for Gemini (Two-message mode)
   const phase1Text = `Look at the attached reference image and the attached vessel image. Before generating any image, please provide a brief analysis: (a) Identify the exact ${itemTypeWord} shown in the reference image, including its visible ingredients, prominent color palette (with approximate hex codes), tactile textures, plating style, and mood. ${vesselAnalysisText} (c) Analyze "${menuName}"${cuisineHintText}: define what this authentic ${itemTypeWord} truly is, along with its verified genuine main ingredients and signature visual cues. (d) Consistency check: if the reference image differs from the authentic version of "${menuName}", your final image must adhere strictly to the authentic ingredients of "${menuName}" while adopting only the reference image's mood, color palette, and lighting style as inspiration. Never copy the reference image's exact composition. If the menu name is ambiguous, state your reasoned assumption clearly instead of inventing arbitrary ingredients. (e) Highlight key opportunities to elevate this presentation to world-class luxury commercial advertising caliber. Do not invent ingredients that are not authentic to this dish or visible in the reference.`;
 
   // Combined beverage dynamic cues
@@ -77,7 +83,7 @@ export function buildGeminiPrompt(state: FormState): {
     : (beverageEffectPhrase || secondaryEffectPhrase);
 
   // Phase 2 Generation paragraph for Gemini
-  const notesText = state.additionalNotes.trim() ? ` Specific styling notes: ${state.additionalNotes.trim()}.` : '';
+  const notesText = state.additionalNotes?.trim() ? ` Specific styling notes: ${state.additionalNotes.trim()}.` : '';
   const bevText = combinedBevEffect ? ` Special beverage dynamic cue: ${combinedBevEffect}.` : '';
 
   const realismCues = isFood
@@ -92,17 +98,14 @@ export function buildGeminiPrompt(state: FormState): {
 
   const phase2Text = `Create an image: A photorealistic, high-end commercial advertising poster photograph of "${menuName}"${cuisineHintText}. The subject must feature verified, authentic fresh ingredients prepared with Michelin-star precision and appetizing vibrancy. ${vesselRuleText} Frame the shot with a ${cameraAnglePhrase}, captured on a ${lensPhrase}. The scene is illuminated by ${lightingPhrase}, sculpting rich depth, specular highlights, and soft graduated shadows. For composition, place the hero ${vesselWord} in a ${positionPhrase}, framed in a ${cropPhrase}, set against a ${backgroundPhrase}. The overall aesthetic and color harmony must be inspired by the attached reference image and elevated into ${moodPhrase}. Maintain absolute photorealism with ${realismCues}, avoiding any CGI artificiality, plastic sheen, or AI look.${bevText}${notesText} The final result must be an ultra-high-resolution commercial print-grade poster in ${state.aspectRatio} aspect ratio. Avoid: text overlays, logos, typography, watermarks, human hands, people, deformed utensils, duplicate plates, or distorted geometry.`;
 
-  // Single message format: Seamlessly combines Phase 1 (Analysis) and Phase 2 (Poster Generation) into one cohesive master prompt
+  // Single message format: Immediate generation with silent pre-check & output rule
   const singleMessage = `${ATTACH_INSTRUCTION}
 
-Execute the following 2-phase commercial advertising workflow in a single response:
+${silentPreCheck}
 
-[PHASE 1: IN-DEPTH VISUAL & CULINARY ANALYSIS]
-${phase1Text}
+${outputRule}
 
-[PHASE 2: COMMERCIAL ADVERTISING POSTER GENERATION]
-Using your analysis, verified authentic ingredients, and aesthetic guidelines from Phase 1 above, create the final image:
-${phase2Text.replace('Create an image: ', '')}`;
+${phase2Text}`;
 
   // Two messages format
   const message1 = `${ATTACH_INSTRUCTION}
@@ -127,6 +130,7 @@ export function buildChatGPTPrompt(state: FormState): {
   const isFood = state.subjectType === 'food';
   const menuName = state.menuName.trim() || (isFood ? 'Gourmet Dish' : 'Artisanal Beverage');
   const cuisineHintText = state.cuisineHint.trim() ? ` (Cuisine/Origin: ${state.cuisineHint.trim()})` : '';
+  const cuisineSilentPart = state.cuisineHint.trim() ? ` (cuisine hint: "${state.cuisineHint.trim()}")` : '';
 
   const cameraAnglePhrase = getOptionPhrase(CAMERA_ANGLES, state.cameraAngle);
   const lightingPhrase = getOptionPhrase(LIGHTING_STYLES, state.lighting);
@@ -150,12 +154,17 @@ export function buildChatGPTPrompt(state: FormState): {
   const vesselWord = isFood ? 'plate/bowl' : (isCan ? 'aluminum soda can' : 'glass/bottle');
   const itemTypeWord = isFood ? 'plated food dish' : (isCan ? 'canned soda beverage' : 'beverage');
 
-  // Vessel analysis text
+  // Silent pre-check and output rule instructions for immediate image generation
+  const silentPreCheck = `SILENT PRE-CHECK (do this internally, do NOT write it out): Study the attached reference image and the attached vessel image. Work out the vessel's exact material, shape and color, the reference image's colors, textures, plating style and mood, and the authentic main ingredients and signature look of "${menuName}"${cuisineSilentPart}. If the reference image conflicts with the authentic version of "${menuName}", follow the authentic main ingredients while keeping the reference's mood, colors and style. If the name is ambiguous, choose the most likely interpretation silently. Never invent ingredients that are not part of the real dish or visible in the reference.`;
+
+  const outputRule = `OUTPUT RULE: Respond with the generated image only. Do not write any analysis, explanation, description, caption, introduction, summary, or follow-up question. Do not describe your plan or repeat these instructions. Generate the image immediately.`;
+
+  // Vessel analysis text (for Two-message mode Step 1)
   const vesselAnalysisText = isCan
     ? 'b) The vessel: exact aluminum soda can proportions, metallic finish, pull-tab detail, and the printed graphics and color identity from the attached image (replicate faithfully as shown, without generating unauthorized trademark logos).'
     : 'b) The vessel: exact material, shape, color, proportions, and distinctive design details.';
 
-  // Step 1 Analysis text
+  // Step 1 Analysis text (Two-message mode)
   const step1Text = `Step 1 – Analyze first:
 Please examine the attached reference image and the attached vessel image, and briefly state:
 a) What ${itemTypeWord} is shown in the reference image, its visible ingredients, color palette with approximate hex codes, surface textures, plating style, and overall mood.
@@ -170,7 +179,7 @@ Note: Do not invent ingredients that are not authentic to this dish or visible i
     ? `${beverageEffectPhrase}, paired with ${secondaryEffectPhrase}`
     : (beverageEffectPhrase || secondaryEffectPhrase);
 
-  // Step 2 Generation text
+  // Step 2 Generation lines for ChatGPT
   const realismCues = isFood
     ? 'Natural wafting steam where appropriate, glossy sauce highlights, fresh glistening moisture on herbs, crisp textured sear, subtle natural culinary imperfections, true-to-life scale, zero plastic/CGI look'
     : isCan
@@ -181,11 +190,10 @@ Note: Do not invent ingredients that are not authentic to this dish or visible i
     ? 'Exact aluminum soda can from the attached vessel image (faithfully replicating its material, metallic finish, colors, and can artwork without alteration; do not invent real trademark logos).'
     : 'Exact vessel from the attached vessel image (identical material, shape, and color finish). Do not alter the vessel.';
 
-  const notesLine = state.additionalNotes.trim() ? `\n• Notes: ${state.additionalNotes.trim()}` : '';
+  const notesLine = state.additionalNotes?.trim() ? `\n• Notes: ${state.additionalNotes.trim()}` : '';
   const bevLine = combinedBevEffect ? `\n• Special Effect: ${combinedBevEffect}` : '';
 
-  const step2Text = `Step 2 – Create the poster image:
-Create one photorealistic commercial advertising poster photograph of "${menuName}" in aspect ratio ${state.aspectRatio}:
+  const generationLines = `Create one photorealistic commercial advertising poster photograph of "${menuName}" in aspect ratio ${state.aspectRatio}:
 • Subject: "${menuName}"${cuisineHintText} featuring verified authentic fresh ingredients, exquisite culinary craft, and appetizing textures.
 • Vessel: ${vesselRuleText}
 • Camera: ${cameraAnglePhrase}; captured with a ${lensPhrase}.
@@ -196,24 +204,14 @@ Create one photorealistic commercial advertising poster photograph of "${menuNam
 • Technical: Ultra-high resolution, commercial print advertising quality, razor-sharp focus plane, aspect ratio ${state.aspectRatio}.
 • Avoid: Text overlays, typography, logos, brand watermarks, human hands, people, deformed utensils, duplicate plates, or distorted geometry.`;
 
-  // Single message format: Seamlessly combines Step 1 (Analysis) and Step 2 (Poster Generation) into one cohesive master prompt
+  // Single message format: Immediate generation with silent pre-check & output rule
   const singleMessage = `${ATTACH_INSTRUCTION}
 
-Execute this 2-step commercial advertising photography workflow in a single session:
+${silentPreCheck}
 
-${step1Text}
+${outputRule}
 
-Step 2 – Create the advertising poster image:
-Using your verified analysis, authentic ingredient definition, and vessel details from Step 1 above, create one photorealistic commercial advertising poster photograph of "${menuName}" in aspect ratio ${state.aspectRatio}:
-• Subject: "${menuName}"${cuisineHintText} featuring verified authentic fresh ingredients, exquisite culinary craft, and appetizing textures.
-• Vessel: ${vesselRuleText}
-• Camera: ${cameraAnglePhrase}; captured with a ${lensPhrase}.
-• Lighting: ${lightingPhrase}.
-• Composition: Hero ${vesselWord} positioned at ${positionPhrase}; crop distance: ${cropPhrase}; background: ${backgroundPhrase}.
-• Mood & Palette: ${moodPhrase}; color palette, textures, and ambient elegance inspired by the attached reference image (elevated to luxury, do not duplicate the reference layout).
-• Realism: ${realismCues}.${bevLine}${notesLine}
-• Technical: Ultra-high resolution, commercial print advertising quality, razor-sharp focus plane, aspect ratio ${state.aspectRatio}.
-• Avoid: Text overlays, typography, logos, brand watermarks, human hands, people, deformed utensils, duplicate plates, or distorted geometry.`;
+${generationLines}`;
 
   // Two messages format
   const message1 = `${ATTACH_INSTRUCTION}
@@ -224,7 +222,7 @@ Reply with your analysis only and wait for my next message. Do not generate an i
 
   const message2 = `Using your analysis above, create the advertising poster image:
 
-${step2Text.replace('Step 2 – Create the poster image:\n', '')}`;
+${generationLines}`;
 
   return { singleMessage, message1, message2 };
 }

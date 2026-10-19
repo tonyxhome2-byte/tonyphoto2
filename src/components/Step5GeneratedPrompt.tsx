@@ -59,7 +59,7 @@ export const Step5GeneratedPrompt: React.FC<Step5GeneratedPromptProps> = ({
               <span className="text-xs text-amber-800 font-medium">(Generated Ad Prompt)</span>
             </h2>
             <p className="text-xs text-stone-600">
-              สร้างสดตามการตั้งค่าแบบเรียลไทม์ ผสานขั้นตอนวิเคราะห์ภาพและคำสั่งสร้างภาพโฆษณาเข้าด้วยกันอย่างลงตัว
+              สร้างสดตามการตั้งค่าแบบเรียลไทม์ พร้อมคำสั่งตรวจสอบข้อมูลเงียบๆ ในใจ (Silent Pre-check) และสร้างภาพทันทีโดยไม่มีข้อความอธิบายคั่น
             </p>
           </div>
         </div>
@@ -238,7 +238,7 @@ export const Step5GeneratedPrompt: React.FC<Step5GeneratedPromptProps> = ({
                     <span>พรอมต์รวมฉบับสมบูรณ์ (Harmonized Master Prompt)</span>
                   </span>
                   <span className="text-[11px] text-amber-900 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-md font-semibold">
-                    ผสานขั้นตอนวิเคราะห์และสร้างภาพโฆษณาเรียบร้อยแล้ว
+                    สั่ง AI ทำ Pre-check เงียบๆ และสร้างภาพทันที (Output Image Only)
                   </span>
                 </div>
               </div>
@@ -247,11 +247,11 @@ export const Step5GeneratedPrompt: React.FC<Step5GeneratedPromptProps> = ({
               <div className="flex flex-wrap gap-2 text-[11px]">
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-200 font-medium">
                   <Check className="w-3 h-3 text-amber-700" />
-                  <strong>ขั้นตอนที่ 1:</strong> วิเคราะห์วัตถุดิบแท้และภาชนะจากภาพอ้างอิง
+                  <strong>กฎที่ 1:</strong> Silent Pre-check ตรวจสอบภาชนะและวัตถุดิบแท้ในใจ (ไม่พิมพ์ข้อความออกมา)
                 </span>
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-200 font-medium">
                   <Check className="w-3 h-3 text-emerald-700" />
-                  <strong>ขั้นตอนที่ 2:</strong> คำสั่งสร้างภาพโฆษณาโฟโตเรียลลิสติกตามมุมกล้องและแสง
+                  <strong>กฎที่ 2:</strong> Output Rule ส่งภาพที่สร้างทันที ห้ามพิมพ์คำอธิบาย แผนงาน หรือข้อความนำใดๆ
                 </span>
               </div>
 
