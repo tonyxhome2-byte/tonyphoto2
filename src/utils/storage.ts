@@ -38,6 +38,7 @@ export const DEFAULT_FORM_STATE: FormState = {
   additionalNotes: '',
   outputMode: 'one-message',
   addFriedEgg: false,
+  servingStyle: 'none',
 };
 
 /**
@@ -69,6 +70,7 @@ function sanitizePreset(raw: any): PresetItem | null {
     outputMode: raw.outputMode === 'two-messages' ? 'two-messages' : 'one-message',
     coverImageDataUrl: typeof raw.coverImageDataUrl === 'string' ? raw.coverImageDataUrl : undefined,
     addFriedEgg: typeof raw.addFriedEgg === 'boolean' ? raw.addFriedEgg : false,
+    servingStyle: raw.servingStyle === 'over_rice' || raw.servingStyle === 'main_only' ? raw.servingStyle : 'none',
   };
 }
 

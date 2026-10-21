@@ -18,6 +18,12 @@ export const FRIED_EGG_PHRASE =
   `EGG PLACEMENT (critical): Place one perfect sunny-side up fried egg directly on top of the mound of steamed rice. The egg must rest on the rice itself, with the rice visibly supporting it and the yolk sitting above the top of the rice mound. Do NOT place the egg in the middle of the plate, do NOT place it between the rice and the main dish or side dishes, and do NOT place it on top of the main dish or its sauce. The rice mound stays distinct and separate from the main dish, and the egg is the topping of the rice only. If the dish contains no steamed rice at all, place the egg on top of the main item instead.
 EGG APPEARANCE (natural, real home-cooked look): The fried egg looks genuinely cooked in a pan, not a perfect studio model. Its shape is organic and slightly irregular, NOT a perfect circle: the edge is gently uneven with soft natural ruffles and small wavy curves. The egg white is tender and soft with a slight natural translucency near the thin outer edges, a few tiny natural bubbles or lacy texture at the rim, and at most a very faint trace of golden color at the edge, never crispy or browned. Because of gravity, the egg white drapes and relaxes over the surface of the rice, following the curves and grains of the rice mound, spreading slightly down the sides and settling softly into the rice rather than standing stiff or flat like a disc. The yolk is plump and glossy but slightly off-center and not a perfect sphere: it has a gentle natural dome that sags a little under its own weight, with a thin delicate membrane, a soft wet sheen, a few subtle natural reflections, and slightly uneven color from deep orange to golden. The egg looks soft, moist and wobbly, as if it would jiggle when touched, never hard, rubbery, plastic, waxy or glossy like a toy. Include subtle natural imperfections such as tiny uneven spots on the white, and natural contact shadows where the egg meets the rice. The egg is natural in size and proportion to the rice mound and the plate, with exactly one egg.`;
 
+export const SERVING_STYLE_OVER_RICE_PHRASE =
+  `PLATE LAYOUT (critical, follow exactly): Arrange the plate like a clock face as seen from the viewer's point of view in the final image, with 12 o'clock at the top of the image. Place the steamed rice mound at the 10 o'clock position (upper left of the plate). Place the main dish (the topping, curry, stir-fry or sauce portion) at the 4 o'clock position (lower right of the plate). The rice and the main dish are two distinct portions placed on opposite sides of the plate, with the main dish positioned so that it appears served over and alongside the rice edge, not mixed into the rice. Use this exact layout even if the reference image arranges the food differently, while keeping the food's appearance, ingredients, colors and textures the same as in the reference. Keep both portions fully within the rim of the plate.`;
+
+export const SERVING_STYLE_MAIN_ONLY_PHRASE =
+  `PLATE LAYOUT (critical, follow exactly): This is a main-dish-only plate with NO rice and no rice-like grains anywhere on the plate. Place the main dish in the exact center of the plate. Make the portion of the main dish twice the normal amount (100% more food than shown in the reference): generously heaped and abundant, filling the center of the plate and its surroundings while staying neatly within the plate rim and looking naturally plated, not spilling over or overlapping the rim. Use this layout even if the reference image shows a smaller portion or a different arrangement, while keeping the food's appearance, ingredients, colors and textures the same as in the reference.`;
+
 /**
  * Builds deterministic Gemini prompt texts
  */
@@ -101,8 +107,14 @@ export function buildGeminiPrompt(state: FormState): {
     : 'The food or drink must be served in the exact vessel shown in the attached vessel image—faithfully replicating its precise material, shape, color, and finish without alteration.';
 
   const eggPhraseText = isFood && state.addFriedEgg ? ` ${FRIED_EGG_PHRASE}` : '';
+  const servingStyleText =
+    isFood && state.servingStyle === 'over_rice'
+      ? ` ${SERVING_STYLE_OVER_RICE_PHRASE}`
+      : isFood && state.servingStyle === 'main_only'
+      ? ` ${SERVING_STYLE_MAIN_ONLY_PHRASE}`
+      : '';
 
-  const phase2Text = `Create an image: A photorealistic, high-end commercial advertising poster photograph of "${menuName}"${cuisineHintText}. The subject must feature verified, authentic fresh ingredients prepared with Michelin-star precision and appetizing vibrancy.${eggPhraseText} ${vesselRuleText} Frame the shot with a ${cameraAnglePhrase}, captured on a ${lensPhrase}. The scene is illuminated by ${lightingPhrase}, sculpting rich depth, specular highlights, and soft graduated shadows. For composition, place the hero ${vesselWord} in a ${positionPhrase}, framed in a ${cropPhrase}, set against a ${backgroundPhrase}. The overall aesthetic and color harmony must be inspired by the attached reference image and elevated into ${moodPhrase}. Maintain absolute photorealism with ${realismCues}, avoiding any CGI artificiality, plastic sheen, or AI look.${bevText}${notesText} The final result must be an ultra-high-resolution commercial print-grade poster in ${state.aspectRatio} aspect ratio. Avoid: text overlays, logos, typography, watermarks, human hands, people, deformed utensils, duplicate plates, or distorted geometry.`;
+  const phase2Text = `Create an image: A photorealistic, high-end commercial advertising poster photograph of "${menuName}"${cuisineHintText}. The subject must feature verified, authentic fresh ingredients prepared with Michelin-star precision and appetizing vibrancy.${eggPhraseText} ${vesselRuleText} Frame the shot with a ${cameraAnglePhrase}, captured on a ${lensPhrase}. The scene is illuminated by ${lightingPhrase}, sculpting rich depth, specular highlights, and soft graduated shadows. For composition, place the hero ${vesselWord} in a ${positionPhrase}, framed in a ${cropPhrase}, set against a ${backgroundPhrase}.${servingStyleText} The overall aesthetic and color harmony must be inspired by the attached reference image and elevated into ${moodPhrase}. Maintain absolute photorealism with ${realismCues}, avoiding any CGI artificiality, plastic sheen, or AI look.${bevText}${notesText} The final result must be an ultra-high-resolution commercial print-grade poster in ${state.aspectRatio} aspect ratio. Avoid: text overlays, logos, typography, watermarks, human hands, people, deformed utensils, duplicate plates, or distorted geometry.`;
 
   // Single message format: Immediate generation with silent pre-check & output rule
   const singleMessage = `${ATTACH_INSTRUCTION}
@@ -199,13 +211,19 @@ Note: Do not invent ingredients that are not authentic to this dish or visible i
   const notesLine = state.additionalNotes?.trim() ? `\n• Notes: ${state.additionalNotes.trim()}` : '';
   const bevLine = combinedBevEffect ? `\n• Special Effect: ${combinedBevEffect}` : '';
   const eggPhraseText = isFood && state.addFriedEgg ? ` ${FRIED_EGG_PHRASE}` : '';
+  const servingStyleText =
+    isFood && state.servingStyle === 'over_rice'
+      ? ` ${SERVING_STYLE_OVER_RICE_PHRASE}`
+      : isFood && state.servingStyle === 'main_only'
+      ? ` ${SERVING_STYLE_MAIN_ONLY_PHRASE}`
+      : '';
 
   const generationLines = `Create one photorealistic commercial advertising poster photograph of "${menuName}" in aspect ratio ${state.aspectRatio}:
 • Subject: "${menuName}"${cuisineHintText} featuring verified authentic fresh ingredients, exquisite culinary craft, and appetizing textures.${eggPhraseText}
 • Vessel: ${vesselRuleText}
 • Camera: ${cameraAnglePhrase}; captured with a ${lensPhrase}.
 • Lighting: ${lightingPhrase}.
-• Composition: Hero ${vesselWord} positioned at ${positionPhrase}; crop distance: ${cropPhrase}; background: ${backgroundPhrase}.
+• Composition: Hero ${vesselWord} positioned at ${positionPhrase}; crop distance: ${cropPhrase}; background: ${backgroundPhrase}.${servingStyleText}
 • Mood & Palette: ${moodPhrase}; color palette, textures, and ambient elegance inspired by the attached reference image (elevated to luxury, do not duplicate the reference layout).
 • Realism: ${realismCues}.${bevLine}${notesLine}
 • Technical: Ultra-high resolution, commercial print advertising quality, razor-sharp focus plane, aspect ratio ${state.aspectRatio}.

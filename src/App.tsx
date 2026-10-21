@@ -116,6 +116,7 @@ export default function App() {
       additionalNotes: formState.additionalNotes,
       outputMode: formState.outputMode,
       addFriedEgg: Boolean(formState.addFriedEgg),
+      servingStyle: formState.servingStyle || 'none',
     };
 
     const res = savePresetItem(newPreset);
@@ -145,6 +146,7 @@ export default function App() {
       additionalNotes: preset.additionalNotes,
       outputMode: preset.outputMode,
       addFriedEgg: typeof preset.addFriedEgg === 'boolean' ? preset.addFriedEgg : false,
+      servingStyle: (preset.servingStyle === 'over_rice' || preset.servingStyle === 'main_only') ? preset.servingStyle : 'none',
     });
     setCurrentPage('main');
     showNotification('success', `โหลดพรีเซ็ต "${preset.name}" เรียบร้อยแล้ว (สามารถเปลี่ยนชื่อเมนูได้ทันที)`);
@@ -214,6 +216,10 @@ export default function App() {
               <Step1TypeSelection
                 selectedType={formState.subjectType}
                 onChange={handleSubjectTypeChange}
+                servingStyle={formState.servingStyle}
+                onServingStyleChange={(style) => setFormState((prev) => ({ ...prev, servingStyle: style }))}
+                addFriedEgg={Boolean(formState.addFriedEgg)}
+                onAddFriedEggChange={(checked) => setFormState((prev) => ({ ...prev, addFriedEgg: checked }))}
               />
 
               {/* STEP 2: MENU NAME */}
