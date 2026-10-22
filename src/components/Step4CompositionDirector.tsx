@@ -40,7 +40,8 @@ export const Step4CompositionDirector: React.FC<Step4CompositionDirectorProps> =
   onAdditionalNotesChange,
   onAddFriedEggChange,
 }) => {
-  const isFood = subjectType === 'food';
+  const isFood = subjectType !== 'beverage';
+  const isPlainFood = subjectType === 'food';
   const cropOptions = isFood ? CROP_DISTANCES_FOOD : CROP_DISTANCES_BEVERAGE;
 
   return (
@@ -186,7 +187,7 @@ export const Step4CompositionDirector: React.FC<Step4CompositionDirectorProps> =
       </div>
 
       {/* 4. เพิ่มไข่ดาว (Add fried egg) — Food Type Only */}
-      {isFood && (
+      {isPlainFood && (
         <div className="mt-4 pt-4 border-t border-stone-200">
           <label
             className={`flex items-start sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${

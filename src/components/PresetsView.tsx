@@ -181,6 +181,17 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
               </button>
               <button
                 type="button"
+                onClick={() => setFilterType('appetizer')}
+                className={`px-3 py-1 rounded-lg text-xs transition-all cursor-pointer ${
+                  filterType === 'appetizer'
+                    ? 'bg-amber-600 text-white font-bold shadow-xs'
+                    : 'text-stone-700 hover:text-stone-950 font-medium'
+                }`}
+              >
+                เรียกน้ำย่อย
+              </button>
+              <button
+                type="button"
                 onClick={() => setFilterType('beverage')}
                 className={`px-3 py-1 rounded-lg text-xs transition-all cursor-pointer ${
                   filterType === 'beverage'
@@ -221,7 +232,7 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
                         <div className="w-full h-full p-6 flex flex-col justify-between bg-gradient-to-br from-amber-50 via-stone-100 to-amber-100/60">
                           <div className="flex items-center justify-between">
                             <div className="w-9 h-9 rounded-xl bg-white border border-stone-200 flex items-center justify-center text-amber-700 shadow-xs">
-                              {preset.subjectType === 'food' ? (
+                              {preset.subjectType === 'food' || preset.subjectType === 'appetizer' ? (
                                 <Utensils className="w-4 h-4" />
                               ) : (
                                 <GlassWater className="w-4 h-4" />
@@ -249,6 +260,8 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
                           className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold backdrop-blur-md shadow-xs border ${
                             preset.subjectType === 'food'
                               ? 'bg-amber-100 text-amber-900 border-amber-300'
+                              : preset.subjectType === 'appetizer'
+                              ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
                               : 'bg-cyan-100 text-cyan-900 border-cyan-300'
                           }`}
                         >
@@ -256,6 +269,11 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
                             <>
                               <Utensils className="w-3 h-3" />
                               <span>Food</span>
+                            </>
+                          ) : preset.subjectType === 'appetizer' ? (
+                            <>
+                              <Utensils className="w-3 h-3" />
+                              <span>Appetizer</span>
                             </>
                           ) : (
                             <>

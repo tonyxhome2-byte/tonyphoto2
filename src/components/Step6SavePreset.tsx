@@ -20,7 +20,13 @@ export const Step6SavePreset: React.FC<Step6SavePresetProps> = ({
   const handleOpen = () => {
     const defaultName = formState.menuName.trim()
       ? `พรีเซ็ต ${formState.menuName.trim()}`
-      : `พรีเซ็ต ${formState.subjectType === 'food' ? 'อาหารจัดจาน' : 'เครื่องดื่ม'}`;
+      : `พรีเซ็ต ${
+          formState.subjectType === 'food'
+            ? 'อาหารจัดจาน'
+            : formState.subjectType === 'appetizer'
+            ? 'เรียกน้ำย่อย'
+            : 'เครื่องดื่ม'
+        }`;
     setPresetName(defaultName);
     setError(null);
     setIsModalOpen(true);
@@ -123,7 +129,11 @@ export const Step6SavePreset: React.FC<Step6SavePresetProps> = ({
                 <div className="flex justify-between">
                   <span className="text-stone-500">ประเภท:</span>
                   <span className="text-stone-900 font-bold">
-                    {formState.subjectType === 'food' ? 'Food (plated)' : 'Beverage'}
+                    {formState.subjectType === 'food'
+                      ? 'Food (plated)'
+                      : formState.subjectType === 'appetizer'
+                      ? 'Appetizer'
+                      : 'Beverage'}
                   </span>
                 </div>
                 <div className="flex justify-between">

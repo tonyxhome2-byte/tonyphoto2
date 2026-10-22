@@ -17,7 +17,7 @@ export const Step2MenuName: React.FC<Step2MenuNameProps> = ({
   onMenuNameChange,
   onCuisineHintChange,
 }) => {
-  const isFood = subjectType === 'food';
+  const isFood = subjectType !== 'beverage';
 
   return (
     <section className="bg-white/95 border border-stone-200/90 shadow-sm rounded-2xl p-5 sm:p-6 backdrop-blur-sm relative">

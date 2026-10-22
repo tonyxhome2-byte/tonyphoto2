@@ -24,6 +24,9 @@ export const SERVING_STYLE_OVER_RICE_PHRASE =
 export const SERVING_STYLE_MAIN_ONLY_PHRASE =
   `PLATE LAYOUT (critical, follow exactly): This is a main-dish-only plate with NO rice and no rice-like grains anywhere on the plate. Place the main dish in the exact center of the plate. Make the portion of the main dish twice the normal amount (100% more food than shown in the reference): generously heaped and abundant, filling the center of the plate and its surroundings while staying neatly within the plate rim and looking naturally plated, not spilling over or overlapping the rim. Use this layout even if the reference image shows a smaller portion or a different arrangement, while keeping the food's appearance, ingredients, colors and textures the same as in the reference.`;
 
+export const APPETIZER_LAYOUT_PHRASE =
+  `PLATE LAYOUT (critical, follow exactly): This is an appetizer / starter plate with NO rice, no rice-like grains and no unrelated side dishes. Place the appetizer in the exact center of the plate. Use the attached reference image as the primary model for the appetizer: keep its type, shape, color, texture, number of pieces and portion size exactly as shown in the reference. Do NOT increase, multiply or enlarge the portion, and do not add extra pieces, heaps of garnish or any additional food items that are not in the reference; keep the same amount of food as the reference, neatly within the plate rim and naturally plated. Only elevate the lighting, texture detail and overall photographic quality.`;
+
 /**
  * Builds deterministic Gemini prompt texts
  */
@@ -47,7 +50,9 @@ export function buildGeminiPrompt(state: FormState): {
   message1: string;
   message2: string;
 } {
-  const isFood = state.subjectType === 'food';
+  const isFood = state.subjectType !== 'beverage';
+  const isPlainFood = state.subjectType === 'food';
+  const isAppetizer = state.subjectType === 'appetizer';
   const menuName = state.menuName.trim() || (isFood ? 'Gourmet Dish' : 'Artisanal Beverage');
   const cuisineHintText = state.cuisineHint.trim() ? ` (cuisine/origin: ${state.cuisineHint.trim()})` : '';
 
@@ -106,12 +111,14 @@ export function buildGeminiPrompt(state: FormState): {
     ? 'The beverage must be presented in the exact aluminum soda can shown in the attached vessel image—faithfully replicating its precise aluminum finish, pull-tab detail, printed graphics, colors, and can geometry without alteration (faithfully adopt the artwork from the attached image; do not invent trademark brand logos).'
     : 'The food or drink must be served in the exact vessel shown in the attached vessel image—faithfully replicating its precise material, shape, color, and finish without alteration.';
 
-  const eggPhraseText = isFood && state.addFriedEgg ? ` ${FRIED_EGG_PHRASE}` : '';
+  const eggPhraseText = isPlainFood && state.addFriedEgg ? ` ${FRIED_EGG_PHRASE}` : '';
   const servingStyleText =
-    isFood && state.servingStyle === 'over_rice'
+    isPlainFood && state.servingStyle === 'over_rice'
       ? ` ${SERVING_STYLE_OVER_RICE_PHRASE}`
-      : isFood && state.servingStyle === 'main_only'
+      : isPlainFood && state.servingStyle === 'main_only'
       ? ` ${SERVING_STYLE_MAIN_ONLY_PHRASE}`
+      : isAppetizer
+      ? ` ${APPETIZER_LAYOUT_PHRASE}`
       : '';
 
   const phase2Text = `Create an image: A photorealistic, high-end commercial advertising poster photograph of "${menuName}"${cuisineHintText}. The subject must feature verified, authentic fresh ingredients prepared with Michelin-star precision and appetizing vibrancy.${eggPhraseText} ${vesselRuleText} Frame the shot with a ${cameraAnglePhrase}, captured on a ${lensPhrase}. The scene is illuminated by ${lightingPhrase}, sculpting rich depth, specular highlights, and soft graduated shadows. For composition, place the hero ${vesselWord} in a ${positionPhrase}, framed in a ${cropPhrase}, set against a ${backgroundPhrase}.${servingStyleText} The overall aesthetic and color harmony must be inspired by the attached reference image and elevated into ${moodPhrase}. Maintain absolute photorealism with ${realismCues}, avoiding any CGI artificiality, plastic sheen, or AI look.${bevText}${notesText} The final result must be an ultra-high-resolution commercial print-grade poster in ${state.aspectRatio} aspect ratio. Avoid: text overlays, logos, typography, watermarks, human hands, people, deformed utensils, duplicate plates, or distorted geometry.`;
@@ -145,7 +152,9 @@ export function buildChatGPTPrompt(state: FormState): {
   message1: string;
   message2: string;
 } {
-  const isFood = state.subjectType === 'food';
+  const isFood = state.subjectType !== 'beverage';
+  const isPlainFood = state.subjectType === 'food';
+  const isAppetizer = state.subjectType === 'appetizer';
   const menuName = state.menuName.trim() || (isFood ? 'Gourmet Dish' : 'Artisanal Beverage');
   const cuisineHintText = state.cuisineHint.trim() ? ` (Cuisine/Origin: ${state.cuisineHint.trim()})` : '';
   const cuisineSilentPart = state.cuisineHint.trim() ? ` (cuisine hint: "${state.cuisineHint.trim()}")` : '';
@@ -210,12 +219,14 @@ Note: Do not invent ingredients that are not authentic to this dish or visible i
 
   const notesLine = state.additionalNotes?.trim() ? `\n• Notes: ${state.additionalNotes.trim()}` : '';
   const bevLine = combinedBevEffect ? `\n• Special Effect: ${combinedBevEffect}` : '';
-  const eggPhraseText = isFood && state.addFriedEgg ? ` ${FRIED_EGG_PHRASE}` : '';
+  const eggPhraseText = isPlainFood && state.addFriedEgg ? ` ${FRIED_EGG_PHRASE}` : '';
   const servingStyleText =
-    isFood && state.servingStyle === 'over_rice'
+    isPlainFood && state.servingStyle === 'over_rice'
       ? ` ${SERVING_STYLE_OVER_RICE_PHRASE}`
-      : isFood && state.servingStyle === 'main_only'
+      : isPlainFood && state.servingStyle === 'main_only'
       ? ` ${SERVING_STYLE_MAIN_ONLY_PHRASE}`
+      : isAppetizer
+      ? ` ${APPETIZER_LAYOUT_PHRASE}`
       : '';
 
   const generationLines = `Create one photorealistic commercial advertising poster photograph of "${menuName}" in aspect ratio ${state.aspectRatio}:

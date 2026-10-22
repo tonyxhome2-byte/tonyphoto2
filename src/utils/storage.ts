@@ -44,10 +44,11 @@ export const DEFAULT_FORM_STATE: FormState = {
 /**
  * Sanitizes a loaded preset object, guaranteeing all required fields exist
  */
-function sanitizePreset(raw: any): PresetItem | null {
+export function sanitizePreset(raw: any): PresetItem | null {
   if (!raw || typeof raw !== 'object') return null;
 
-  const subjectType: SubjectType = raw.subjectType === 'beverage' ? 'beverage' : 'food';
+  const subjectType: SubjectType =
+    raw.subjectType === 'beverage' ? 'beverage' : raw.subjectType === 'appetizer' ? 'appetizer' : 'food';
 
   return {
     id: typeof raw.id === 'string' && raw.id ? raw.id : `preset_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,

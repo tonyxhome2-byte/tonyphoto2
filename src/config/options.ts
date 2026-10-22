@@ -589,7 +589,7 @@ export const ASPECT_RATIOS: Array<{ value: AspectRatio; labelThai: string; label
 export function getOptionPhrase(
   options: DropdownOption[],
   value: string,
-  subjectType?: 'food' | 'beverage'
+  subjectType?: SubjectType
 ): string {
   const match = options.find((opt) => opt.value === value);
   if (!match) return value;

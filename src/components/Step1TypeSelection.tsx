@@ -1,5 +1,5 @@
 import React from 'react';
-import { Utensils, GlassWater, CheckCircle2 } from 'lucide-react';
+import { Utensils, GlassWater, Salad, CheckCircle2 } from 'lucide-react';
 import { ServingStyle, SubjectType } from '../types';
 
 interface Step1TypeSelectionProps {
@@ -37,8 +37,8 @@ export const Step1TypeSelection: React.FC<Step1TypeSelectionProps> = ({
         </div>
       </div>
 
-      {/* Grid of 2 options */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* Grid of 3 options */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Food option */}
         <button
           type="button"
@@ -68,6 +68,38 @@ export const Step1TypeSelection: React.FC<Step1TypeSelectionProps> = ({
           </h3>
           <p className="text-xs text-stone-700 leading-relaxed font-medium">
             อาหารคาว หวาน การจัดจานระดับเชฟไฟน์ไดนิ่ง ศิลปะการราดซอส ผักตกแต่ง และความร้อนควันกรุ่น
+          </p>
+        </button>
+
+        {/* Appetizer option */}
+        <button
+          type="button"
+          onClick={() => onChange('appetizer')}
+          className={`group relative text-left p-4 sm:p-5 rounded-xl border transition-all cursor-pointer ${
+            selectedType === 'appetizer'
+              ? 'bg-amber-50/90 border-amber-600 ring-2 ring-amber-500/25 shadow-sm'
+              : 'bg-stone-50/70 border-stone-300 hover:border-stone-400 hover:bg-stone-100/80'
+          }`}
+        >
+          <div className="flex items-start justify-between">
+            <div
+              className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-colors ${
+                selectedType === 'appetizer'
+                  ? 'bg-amber-600 text-white shadow-sm'
+                  : 'bg-stone-200 text-stone-700 border border-stone-300 group-hover:text-stone-900'
+              }`}
+            >
+              <Salad className="w-6 h-6" />
+            </div>
+            {selectedType === 'appetizer' && (
+              <CheckCircle2 className="w-5 h-5 text-amber-700" />
+            )}
+          </div>
+          <h3 className="text-sm sm:text-base font-bold text-stone-950 mb-1">
+            เรียกน้ำย่อย (Appetizer)
+          </h3>
+          <p className="text-xs text-stone-700 leading-relaxed font-medium">
+            ของทานเล่น อาหารเรียกน้ำย่อย วางกลางจาน ใช้ภาพต้นแบบเป็นหลัก ไม่เพิ่มปริมาณอาหาร
           </p>
         </button>
 

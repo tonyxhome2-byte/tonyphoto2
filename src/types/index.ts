@@ -1,4 +1,4 @@
-export type SubjectType = 'food' | 'beverage';
+export type SubjectType = 'food' | 'beverage' | 'appetizer';
 
 export type ServingStyle = 'none' | 'over_rice' | 'main_only';
 
