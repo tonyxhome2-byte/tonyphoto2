@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   ArrowLeft,
   Upload,
@@ -12,6 +12,7 @@ import {
   X,
   Search,
   Image as ImageIcon,
+  Maximize2,
 } from 'lucide-react';
 import { PresetItem, SubjectType } from '../types';
 import {
@@ -48,6 +49,22 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
   // Renaming state
   const [editingPreset, setEditingPreset] = useState<PresetItem | null>(null);
   const [editingName, setEditingName] = useState('');
+
+  // Full image preview lightbox modal state
+  const [lightboxPreset, setLightboxPreset] = useState<PresetItem | null>(null);
+
+  // Close lightbox on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setLightboxPreset(null);
+      }
+    };
+    if (lightboxPreset) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [lightboxPreset]);
 
   // File upload input per card
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
@@ -220,13 +237,36 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
                 >
                   {/* Top Cover Section */}
                   <div>
-                    <div className="relative h-48 bg-stone-100 overflow-hidden border-b border-stone-200">
+                    <div className="relative h-64 sm:h-72 bg-stone-950 overflow-hidden border-b border-stone-200 flex items-center justify-center">
                       {preset.coverImageDataUrl ? (
-                        <img
-                          src={preset.coverImageDataUrl}
-                          alt={preset.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
+                        <div className="relative w-full h-full flex items-center justify-center p-2.5 overflow-hidden">
+                          {/* Ambient blurred backdrop so the photo floats gracefully without harsh cutoffs */}
+                          <img
+                            src={preset.coverImageDataUrl}
+                            alt=""
+                            aria-hidden="true"
+                            className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none select-none"
+                          />
+                          {/* Full image without cropping (เห็นครบเต็มภาพ 100% ไม่ถูกตัดขอบ) */}
+                          <img
+                            src={preset.coverImageDataUrl}
+                            alt={preset.name}
+                            className="relative z-1 max-w-full max-h-full object-contain rounded-md drop-shadow-md group-hover:scale-[1.02] transition-transform duration-300 select-none"
+                          />
+                          {/* Button to view image in full-screen modal */}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setLightboxPreset(preset);
+                            }}
+                            className="absolute bottom-2.5 right-2.5 z-10 px-2.5 py-1 rounded-lg bg-black/75 hover:bg-black text-white text-[11px] font-semibold backdrop-blur-md border border-white/20 flex items-center gap-1.5 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer shadow-sm"
+                            title="คลิกเพื่อดูภาพขนาดเต็ม (Full view)"
+                          >
+                            <Maximize2 className="w-3.5 h-3.5 text-amber-300" />
+                            <span>ดูภาพเต็ม</span>
+                          </button>
+                        </div>
                       ) : (
                         /* Tasteful warm cream/amber placeholder with preset name */
                         <div className="w-full h-full p-6 flex flex-col justify-between bg-gradient-to-br from-amber-50 via-stone-100 to-amber-100/60">
@@ -255,7 +295,7 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
                       )}
 
                       {/* Subject Type Badge */}
-                      <div className="absolute top-3 left-3">
+                      <div className="absolute top-3 left-3 z-10">
                         <span
                           className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold backdrop-blur-md shadow-xs border ${
                             preset.subjectType === 'food'
@@ -285,7 +325,7 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
                       </div>
 
                       {/* Aspect Ratio Badge */}
-                      <div className="absolute top-3 right-3">
+                      <div className="absolute top-3 right-3 z-10">
                         <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-white/90 text-stone-800 border border-stone-300 backdrop-blur-md shadow-xs">
                           {preset.aspectRatio}
                         </span>
@@ -462,6 +502,70 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
         onConfirm={handleConfirmDelete}
         onCancel={() => setPresetToDelete(null)}
       />
+
+      {/* Full Image Lightbox Modal (ดูภาพขนาดเต็มชัดเจนเพื่อการตัดสินใจ) */}
+      {lightboxPreset && lightboxPreset.coverImageDataUrl && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+          onClick={() => setLightboxPreset(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="relative max-w-5xl max-h-[94vh] w-full flex flex-col items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Bar with Title, Ratio & Action Buttons */}
+            <div className="w-full flex items-center justify-between gap-3 text-white mb-2.5 px-1">
+              <div className="flex items-center gap-2 truncate">
+                <h3 className="font-bold text-sm sm:text-base text-white truncate">
+                  {lightboxPreset.name}
+                </h3>
+                {lightboxPreset.menuName && (
+                  <span className="text-xs text-stone-300 truncate font-medium">
+                    ({lightboxPreset.menuName})
+                  </span>
+                )}
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/20 text-white font-bold shrink-0">
+                  {lightboxPreset.aspectRatio}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelectPreset(lightboxPreset);
+                    setLightboxPreset(null);
+                  }}
+                  className="px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all cursor-pointer shadow-sm flex items-center gap-1.5 hover:scale-[1.02]"
+                >
+                  <Check className="w-3.5 h-3.5 stroke-[3]" />
+                  <span>นำพรีเซ็ตนี้ไปใช้งาน</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLightboxPreset(null)}
+                  className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                  title="ปิด"
+                  aria-label="ปิด"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Uncropped Full Image Frame */}
+            <div className="relative max-h-[82vh] max-w-full flex items-center justify-center rounded-2xl overflow-hidden bg-stone-950 border border-white/15 shadow-2xl p-2">
+              <img
+                src={lightboxPreset.coverImageDataUrl}
+                alt={lightboxPreset.name}
+                className="max-h-[78vh] max-w-full w-auto h-auto object-contain select-none rounded-lg"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
