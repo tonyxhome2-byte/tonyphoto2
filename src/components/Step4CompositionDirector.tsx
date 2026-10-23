@@ -32,16 +32,13 @@ export const Step4CompositionDirector: React.FC<Step4CompositionDirectorProps> =
   backgroundDetail,
   aspectRatio,
   additionalNotes,
-  addFriedEgg = false,
   onMainPositionChange,
   onCropDistanceChange,
   onBackgroundDetailChange,
   onAspectRatioChange,
   onAdditionalNotesChange,
-  onAddFriedEggChange,
 }) => {
   const isFood = subjectType !== 'beverage';
-  const isPlainFood = subjectType === 'food';
   const cropOptions = isFood ? CROP_DISTANCES_FOOD : CROP_DISTANCES_BEVERAGE;
 
   return (
@@ -185,59 +182,6 @@ export const Step4CompositionDirector: React.FC<Step4CompositionDirectorProps> =
           />
         </div>
       </div>
-
-      {/* 4. เพิ่มไข่ดาว (Add fried egg) — Food Type Only */}
-      {isPlainFood && (
-        <div className="mt-4 pt-4 border-t border-stone-200">
-          <label
-            className={`flex items-start sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${
-              addFriedEgg
-                ? 'bg-amber-50/90 border-amber-300 ring-1 ring-amber-300/60 shadow-xs'
-                : 'bg-stone-50/70 hover:bg-stone-50 border-stone-200 text-stone-700'
-            }`}
-          >
-            <div className="flex items-start sm:items-center gap-3">
-              <div
-                className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors shadow-xs ${
-                  addFriedEgg ? 'bg-amber-500 text-white' : 'bg-stone-200 text-stone-600'
-                }`}
-              >
-                <span className="text-base select-none leading-none">🍳</span>
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs sm:text-sm font-bold text-stone-900">
-                    เพิ่มไข่ดาว (Add fried egg)
-                  </span>
-                  <span
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                      addFriedEgg
-                        ? 'bg-amber-200/90 text-amber-900 border border-amber-300'
-                        : 'bg-stone-200 text-stone-600'
-                    }`}
-                  >
-                    {addFriedEgg ? 'เปิดใช้งาน (Active)' : 'ไม่ใส่ (Off)'}
-                  </span>
-                </div>
-                <p className="text-[11px] sm:text-xs text-stone-600 mt-0.5">
-                  เพิ่มไข่ดาวสุกพอดี ไข่แดงเงาอวบ วางบนอาหารจานหลัก
-                </p>
-              </div>
-            </div>
-
-            {/* Accessible Switch Toggle */}
-            <div className="relative inline-flex items-center shrink-0 mt-0.5 sm:mt-0">
-              <input
-                type="checkbox"
-                checked={addFriedEgg}
-                onChange={(e) => onAddFriedEggChange && onAddFriedEggChange(e.target.checked)}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-stone-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-600"></div>
-            </div>
-          </label>
-        </div>
-      )}
     </section>
   );
 };

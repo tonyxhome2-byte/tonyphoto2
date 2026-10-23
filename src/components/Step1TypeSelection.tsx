@@ -37,36 +37,36 @@ export const Step1TypeSelection: React.FC<Step1TypeSelectionProps> = ({
         </div>
       </div>
 
-      {/* Grid of 3 options */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* Grid of 3 options — Compact ~50% smaller cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Food option */}
         <button
           type="button"
           onClick={() => onChange('food')}
-          className={`group relative text-left p-4 sm:p-5 rounded-xl border transition-all cursor-pointer ${
+          className={`group relative text-left p-3 sm:p-3.5 rounded-xl border transition-all cursor-pointer ${
             selectedType === 'food'
               ? 'bg-amber-50/90 border-amber-600 ring-2 ring-amber-500/25 shadow-sm'
               : 'bg-stone-50/70 border-stone-300 hover:border-stone-400 hover:bg-stone-100/80'
           }`}
         >
-          <div className="flex items-start justify-between">
+          <div className="flex items-center justify-between mb-1.5">
             <div
-              className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-colors ${
+              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center transition-colors ${
                 selectedType === 'food'
-                  ? 'bg-amber-600 text-white shadow-sm'
+                  ? 'bg-amber-600 text-white shadow-xs'
                   : 'bg-stone-200 text-stone-700 border border-stone-300 group-hover:text-stone-900'
               }`}
             >
-              <Utensils className="w-6 h-6" />
+              <Utensils className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             {selectedType === 'food' && (
-              <CheckCircle2 className="w-5 h-5 text-amber-700" />
+              <CheckCircle2 className="w-4 h-4 text-amber-700" />
             )}
           </div>
-          <h3 className="text-sm sm:text-base font-bold text-stone-950 mb-1">
+          <h3 className="text-xs sm:text-sm font-bold text-stone-950 mb-0.5">
             Food (plated) — อาหารจัดจาน
           </h3>
-          <p className="text-xs text-stone-700 leading-relaxed font-medium">
+          <p className="text-[11px] text-stone-600 leading-tight font-medium line-clamp-2">
             อาหารคาว หวาน การจัดจานระดับเชฟไฟน์ไดนิ่ง ศิลปะการราดซอส ผักตกแต่ง และความร้อนควันกรุ่น
           </p>
         </button>
@@ -75,30 +75,30 @@ export const Step1TypeSelection: React.FC<Step1TypeSelectionProps> = ({
         <button
           type="button"
           onClick={() => onChange('appetizer')}
-          className={`group relative text-left p-4 sm:p-5 rounded-xl border transition-all cursor-pointer ${
+          className={`group relative text-left p-3 sm:p-3.5 rounded-xl border transition-all cursor-pointer ${
             selectedType === 'appetizer'
               ? 'bg-amber-50/90 border-amber-600 ring-2 ring-amber-500/25 shadow-sm'
               : 'bg-stone-50/70 border-stone-300 hover:border-stone-400 hover:bg-stone-100/80'
           }`}
         >
-          <div className="flex items-start justify-between">
+          <div className="flex items-center justify-between mb-1.5">
             <div
-              className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-colors ${
+              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center transition-colors ${
                 selectedType === 'appetizer'
-                  ? 'bg-amber-600 text-white shadow-sm'
+                  ? 'bg-amber-600 text-white shadow-xs'
                   : 'bg-stone-200 text-stone-700 border border-stone-300 group-hover:text-stone-900'
               }`}
             >
-              <Salad className="w-6 h-6" />
+              <Salad className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             {selectedType === 'appetizer' && (
-              <CheckCircle2 className="w-5 h-5 text-amber-700" />
+              <CheckCircle2 className="w-4 h-4 text-amber-700" />
             )}
           </div>
-          <h3 className="text-sm sm:text-base font-bold text-stone-950 mb-1">
+          <h3 className="text-xs sm:text-sm font-bold text-stone-950 mb-0.5">
             เรียกน้ำย่อย (Appetizer)
           </h3>
-          <p className="text-xs text-stone-700 leading-relaxed font-medium">
+          <p className="text-[11px] text-stone-600 leading-tight font-medium line-clamp-2">
             ของทานเล่น อาหารเรียกน้ำย่อย วางกลางจาน ใช้ภาพต้นแบบเป็นหลัก ไม่เพิ่มปริมาณอาหาร
           </p>
         </button>
@@ -107,30 +107,30 @@ export const Step1TypeSelection: React.FC<Step1TypeSelectionProps> = ({
         <button
           type="button"
           onClick={() => onChange('beverage')}
-          className={`group relative text-left p-4 sm:p-5 rounded-xl border transition-all cursor-pointer ${
+          className={`group relative text-left p-3 sm:p-3.5 rounded-xl border transition-all cursor-pointer ${
             selectedType === 'beverage'
               ? 'bg-amber-50/90 border-amber-600 ring-2 ring-amber-500/25 shadow-sm'
               : 'bg-stone-50/70 border-stone-300 hover:border-stone-400 hover:bg-stone-100/80'
           }`}
         >
-          <div className="flex items-start justify-between">
+          <div className="flex items-center justify-between mb-1.5">
             <div
-              className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-colors ${
+              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center transition-colors ${
                 selectedType === 'beverage'
-                  ? 'bg-amber-600 text-white shadow-sm'
+                  ? 'bg-amber-600 text-white shadow-xs'
                   : 'bg-stone-200 text-stone-700 border border-stone-300 group-hover:text-stone-900'
               }`}
             >
-              <GlassWater className="w-6 h-6" />
+              <GlassWater className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
             {selectedType === 'beverage' && (
-              <CheckCircle2 className="w-5 h-5 text-amber-700" />
+              <CheckCircle2 className="w-4 h-4 text-amber-700" />
             )}
           </div>
-          <h3 className="text-sm sm:text-base font-bold text-stone-950 mb-1">
+          <h3 className="text-xs sm:text-sm font-bold text-stone-950 mb-0.5">
             Beverage — เครื่องดื่ม
           </h3>
-          <p className="text-xs text-stone-700 leading-relaxed font-medium">
+          <p className="text-[11px] text-stone-600 leading-tight font-medium line-clamp-2">
             ค็อกเทล กาแฟ ไวน์ น้ำผลไม้ สมูทตี้ ละอองไอน้ำเกาะแก้ว ก้อนน้ำแข็งคริสตัล แสงส่องทะลุของเหลว และสแปลช
           </p>
         </button>

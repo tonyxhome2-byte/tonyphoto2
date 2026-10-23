@@ -254,13 +254,11 @@ export default function App() {
                 backgroundDetail={formState.backgroundDetail}
                 aspectRatio={formState.aspectRatio}
                 additionalNotes={formState.additionalNotes}
-                addFriedEgg={Boolean(formState.addFriedEgg)}
                 onMainPositionChange={(pos) => setFormState((prev) => ({ ...prev, mainPosition: pos }))}
                 onCropDistanceChange={(crop) => setFormState((prev) => ({ ...prev, cropDistance: crop }))}
                 onBackgroundDetailChange={(bg) => setFormState((prev) => ({ ...prev, backgroundDetail: bg }))}
                 onAspectRatioChange={(ratio: AspectRatio) => setFormState((prev) => ({ ...prev, aspectRatio: ratio }))}
                 onAdditionalNotesChange={(notes) => setFormState((prev) => ({ ...prev, additionalNotes: notes }))}
-                onAddFriedEggChange={(checked) => setFormState((prev) => ({ ...prev, addFriedEgg: checked }))}
               />
 
               {/* STEP 5: GENERATED PROMPT */}
